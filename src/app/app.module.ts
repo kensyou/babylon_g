@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { Building3dComponent } from './building3d/building3d.component';
+import { ResizeService } from './services/resize.service';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,7 @@ import { Building3dComponent } from './building3d/building3d.component';
   imports: [
     BrowserModule
   ],
-  providers: [],
+  providers: [ResizeService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
