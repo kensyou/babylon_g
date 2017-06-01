@@ -67,6 +67,46 @@ class Game {
     // create a built-in "ground" shape
     let ground = BABYLON.MeshBuilder.CreateGround('ground1',
       { width: 6, height: 6, subdivisions: 2 }, this._scene);
+
+    this._scene.registerBeforeRender(() => {
+      // limit camera pen angle
+      // look up
+      if (this._camera.rotation.x < -0.3) {
+        this._camera.rotation.x = -0.3;
+      }
+      // look down
+      if (this._camera.rotation.x > 0.7) {
+        this._camera.rotation.x = 0.7;
+      }
+      // look left 
+      if (this._camera.rotation.y < -0.5) {
+        this._camera.rotation.y = -0.5;
+      }
+      // look right
+      if (this._camera.rotation.y > 0.5) {
+        this._camera.rotation.y = 0.5;
+      }
+      // limit camera position
+      if (this._camera.position.x > 0.5) {
+        this._camera.position.x = 0.5;
+      }
+      if (this._camera.position.x < -0.5) {
+        this._camera.position.x = -0.5;
+      }
+      if (this._camera.position.y > 11) {
+        this._camera.position.y = 11;
+      }
+      if (this._camera.position.y < 4) {
+        this._camera.position.y = 4;
+      }
+      if (this._camera.position.z > -11) {
+        this._camera.position.z = -11;
+      }
+      if (this._camera.position.z < -9) {
+        this._camera.position.z = -9;
+      }
+    })
+
   }
 
   animate(): void {
