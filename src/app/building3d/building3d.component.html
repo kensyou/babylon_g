@@ -1,4 +1,10 @@
 <canvas #renderCanvas id="renderCanvas"></canvas>
-<div  id="overlay">
-    <h1>{{buildingName$ | async}}</h1>
+<div id="overlay">
+    <div id="panel" fxLayout="row">
+        <div fxFlexOffset="50" fxFlex>
+            <h1>{{buildingName$ | async}}</h1>
+            <button (click)="capturePng()">Capture</button>
+            <button (click)="exportPowerpoint()">Powerpoint</button>
+        </div>
+    </div>
 </div>

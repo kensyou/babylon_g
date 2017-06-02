@@ -16,6 +16,9 @@
     z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
     pointer-events: none;
 }
+#panel{
+    pointer-events: initial;
+}
 h1 {
-    margin-left: 1rem;
+    font-size: 1.5rem;
 }

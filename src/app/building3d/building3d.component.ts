@@ -8,6 +8,7 @@ import * as sortBy from "lodash/fp/sortBy";
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'cb-building3d',
@@ -21,7 +22,7 @@ export class Building3dComponent implements OnInit, AfterViewInit {
 
   private buildingName$: Observable<string>;
   private buildingNameSubject: Subject<string>;
-
+  private generator: Building3DGenerator;
   constructor(private resizeService: ResizeService, private dataService: DataService) { }
 
   ngOnInit() {
@@ -33,13 +34,19 @@ export class Building3dComponent implements OnInit, AfterViewInit {
     this.dataService.getBuildingData$().subscribe((building: IBuilding) => {
       this.buildingNameSubject.next(building.buildingName);
       this._canvas = this.el.nativeElement;
-      let g = new Building3DGenerator(this._canvas, this.resizeService);
-      g.createScene(building);
-      g.animate();
+      this.generator = new Building3DGenerator(this._canvas, this.resizeService);
+      this.generator.createScene(building);
+      this.generator.animate();
     });
   }
+  capturePng() {
+    this.generator.captureScreen(true);
+  }
+  exportPowerpoint() {
+    this.generator.exportPowerpoint();
+  }
 }
-
+declare var PptxGenJS: any;
 class Building3DGenerator {
   private _canvas: HTMLCanvasElement;
   private _engine: BABYLON.Engine;
@@ -50,7 +57,30 @@ class Building3DGenerator {
   constructor(canvas: HTMLCanvasElement, private resizeService: ResizeService) {
     this._canvas = canvas;
     // Create canvas and engine
-    this._engine = new BABYLON.Engine(<any>this._canvas, true);
+    this._engine = new BABYLON.Engine(<any>this._canvas, true, { preserveDrawingBuffer: true });
+  }
+  captureScreen(highQuality?: boolean) {
+    if (highQuality) {
+      // double quality
+      BABYLON.Tools.CreateScreenshot(this._engine, this._camera, { precision: 2 }, (data: string) => {
+        window.location.href = data;
+      });
+    } else {
+      // stand quality
+      BABYLON.Tools.CreateScreenshot(this._engine, this._camera, { precision: 1 }, (data: string) => {
+        window.location.href = data;
+      });
+    }
+  }
+  exportPowerpoint() {
+    var p = new PptxGenJS();
+    var slide = p.addNewSlide();
+    BABYLON.Tools.CreateScreenshot(this._engine, this._camera, { precision: 2 }, (data: string) => {
+      slide.addImage({ data: data, x: 0.0, y: 0.0, w: 6.0, h: 4.0 });
+      p.save('Sample Presentation');
+    });
+    //slide.addText('Hello World!', { x: 1.5, y: 1.5, font_size: 18, color: '363636' });
+
   }
 
   createScene(building: IBuilding): void {

@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule, JsonpModule } from '@angular/http';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { AppComponent } from './app.component';
 import { Building3dComponent } from './building3d/building3d.component';
@@ -15,7 +16,8 @@ import { DataService } from './services/data.service';
   imports: [
     BrowserModule,
     HttpModule,
-    JsonpModule
+    JsonpModule,
+    FlexLayoutModule
   ],
   providers: [ResizeService, DataService],
   bootstrap: [AppComponent]
